@@ -5,10 +5,8 @@ import com.shop.common.ServerResponse;
 import com.shop.pojo.User;
 import com.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
@@ -27,18 +25,86 @@ public class UserController {
     private UserService userService;
     /**
      * 用户登录
-     * 查询到用户则放至session中
      * @param username 用户名
      * @param password 密码
      * @param session
      * @return
      */
-    @RequestMapping(value = "login.do",method = RequestMethod.GET)
+    @RequestMapping(value = "login.do",method = RequestMethod.POST)
     public ServerResponse<User> login(String username, String password, HttpSession session){
         ServerResponse<User> loginUser = userService.login(username,password);
-        if(loginUser.isSuccess()){
+        if (loginUser.isSuccess()) {
             session.setAttribute(Const.CURRENT_USER,loginUser.getData());
         }
+        System.out.println(loginUser);
         return loginUser;
+    }
+
+    /**
+     * 获取登陆用户信息
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "getUserInfo.do",method = RequestMethod.GET)
+    public ServerResponse<User> getUserInfo(HttpSession session){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user != null) {
+            return ServerResponse.createBySuccess(user);
+        }
+        return ServerResponse.createByErrorMessage("用户未登陆");
+    }
+
+
+    /**
+     * 用户注册
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "register.do",method = RequestMethod.POST)
+    public ServerResponse<String> register(User user){
+        return userService.register(user);
+    }
+
+    /**
+     * 用户退出登录
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "logout.do",method = RequestMethod.GET)
+    public ServerResponse<String> logout(HttpSession session){
+        session.removeAttribute(Const.CURRENT_USER);
+        return ServerResponse.createBySuccess();
+    }
+
+    /**
+     * 校检用户名或者邮箱是否存在
+     * @param str 要校检的字符串
+     * @param type 字符串的类型 username  or  email
+     * @return
+     */
+    @RequestMapping(value = "checkValid.do",method = RequestMethod.GET)
+    public ServerResponse<String> checkUserNameOrEmail(String str, String type){
+        return userService.checkValid(str,type);
+    }
+
+    /**
+     * 获取用户重置密码问题
+     * @param username 用户名
+     * @return
+     */
+    @RequestMapping(value = "getQuestion.do",method = RequestMethod.GET)
+    public ServerResponse<String> getQuestion(String username){
+       return  userService.selectQuestion(username);
+    }
+
+    /**
+     * @param username 用户名
+     * @param question 用户问题
+     * @param answer   用户输入的答案
+     * @return
+     */
+    @RequestMapping(value = "getQuestionAnswer.do",method = RequestMethod.GET)
+    public ServerResponse<String> getQuestionAnswer(String username, String question, String answer ){
+        return userService.checkAnswer(username, question, answer);
     }
 }

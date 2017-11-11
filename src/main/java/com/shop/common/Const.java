@@ -5,7 +5,10 @@ import com.google.common.collect.Sets;
 import java.util.Set;
 
 /**
- * Created by geely
+ * Const
+ * 常量类
+ * @author Yarn
+ * @create 2017/11/8/9:48
  */
 public class Const {
 
@@ -19,9 +22,14 @@ public class Const {
     }
 
     public interface Cart{
-        //即购物车选中状态
+        /**
+         * 即购物车选中状态
+         */
         int CHECKED = 1;
-        //购物车中未选中状态
+
+        /**
+         * 购物车中未选中状态
+         */
         int UN_CHECKED = 0;
 
         String LIMIT_NUM_FAIL = "LIMIT_NUM_FAIL";
@@ -29,8 +37,14 @@ public class Const {
     }
 
     public interface Role{
-        int ROLE_CUSTOMER = 0; //普通用户
-        int ROLE_ADMIN = 1;//管理员
+        /**
+         * 普通用户
+         */
+        int ROLE_CUSTOMER = 0;
+        /**
+         * 管理员
+         */
+        int ROLE_ADMIN = 1;
     }
 
     public enum ProductStatusEnum{

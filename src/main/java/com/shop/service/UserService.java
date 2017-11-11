@@ -17,4 +17,24 @@ public interface UserService {
      * @return
      */
     ServerResponse<User> login(String username, String password);
+
+    /**
+     * register
+     * 用户注册
+     * @param user
+     * @return
+     */
+    ServerResponse<String> register(User user);
+
+    /**
+     * 校检用户名或者邮箱 是否存在
+     * @param str 要校检的字符串
+     * @param type 字符串的类型
+     * @return
+     */
+    ServerResponse<String> checkValid(String str, String type);
+
+    ServerResponse<String> selectQuestion(String username);
+
+    ServerResponse<String> checkAnswer(String username, String question, String answer);
 }
