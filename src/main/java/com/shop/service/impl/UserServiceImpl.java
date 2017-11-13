@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServerResponse<User> login(String username, String password) {
-        // 检查用户名是否存在
+        // 校检用户名是否存在
         if (userMapper.checkUsername(username) == 0) {
             return ServerResponse.createByErrorMessage("用户名不存在");
         }
@@ -46,17 +46,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServerResponse<String> register(User user) {
-        // 检查用户名是否存在
+        // 校检用户名是否存在
         if (userMapper.checkUsername(user.getUsername()) > 0){
             return ServerResponse.createByErrorMessage("用户名已存在");
         }
-        // 检查邮箱是否存在
+        // 校检邮箱格式是否正确
+        boolean result = Check.checkString(user.getEmail(), Const.RULE_EMAIL);
+        if (!result) {
+            return ServerResponse.createByErrorMessage("邮箱格式不正确");
+        }
+        // 校检邮箱是否存在
         if (userMapper.checkEmail(user.getEmail()) > 0) {
             return ServerResponse.createByErrorMessage("邮箱已存在");
         }
-        //注册的用户默认为普通角色
+        // 注册的用户默认为普通角色
         user.setRole(Const.Role.ROLE_CUSTOMER);
-        //对密码进行MD5加密
+        // 对密码进行MD5加密
         user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
         if (userMapper.insert(user) == 0) {
             return ServerResponse.createByErrorMessage("注册失败");
@@ -66,26 +71,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServerResponse<String> checkValid(String str, String type) {
-        //校检参数类型字符串type不等于null
+        // 校检参数类型字符串type不等于null
         if (StringUtils.isNotBlank(type)) {
-            //校检用户名
+            // 校检用户名
             if (Const.USERNAME.equals(type)) {
                int resultsCount = userMapper.checkUsername(str);
                if (resultsCount > 0) {
                    return ServerResponse.createByErrorMessage("用户名已存在");
                }
             }
-            //校检邮箱
+            // 校检邮箱
             if (Const.EMAIL.equals(type)) {
-                //邮箱匹配正则表达式
-                String RULE_EMAIL = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
-                //对邮箱进行正则表达式的判断
-                boolean result = Check.checkString(str, RULE_EMAIL);
+                //对邮箱进行正则表达式判断
+                boolean result = Check.checkString(str, Const.RULE_EMAIL);
                 if (!result) {
                     return ServerResponse.createByErrorMessage("邮箱格式不正确");
                 }
                 int resultsCount = userMapper.checkEmail(str);
-                if(resultsCount > 0) {
+                if (resultsCount > 0) {
                     return ServerResponse.createByErrorMessage("邮箱已存在");
                 }
             }
@@ -115,17 +118,65 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse<String> checkAnswer(String username, String question, String answer) {
         int resultsCount = userMapper.checkAnswer(username, question, answer);
+        //用户名和问题及答案都是正确的
         if (resultsCount > 0) {
-            //用户名和问题及答案都是正确的
             String forgetToken = UUID.randomUUID().toString();
+            //将token放入本地缓存中
             TokenCache.setKey(username, forgetToken);
+            //将token值返回到前台json数据中
             return ServerResponse.createBySuccess(forgetToken);
         }
         return ServerResponse.createByErrorMessage("问题答案错误");
     }
 
-    public static void main(String[] args) {
-        String forgetToken = UUID.randomUUID().toString();
-        System.out.println(forgetToken);
+    @Override
+    public ServerResponse<String> forgetResetPassword(String username, String passwordNew, String forgetToken) {
+        //校检forgeToken是否为空
+        if (StringUtils.isBlank(forgetToken)) {
+            return ServerResponse.createByErrorMessage("参数错误  需要传递token");
+        }
+        //校检用户名是否存在
+        ServerResponse<String> valid = this.checkValid(username, Const.USERNAME);
+        if (valid.isSuccess()) {
+            //用户名不存在
+            return ServerResponse.createByErrorMessage("用户名不存在");
+        }
+        //通过key得到value
+        String value = TokenCache.getKey(username);
+        if (StringUtils.isBlank(value)){
+            //value为空
+            return ServerResponse.createByErrorMessage("token无效 或者 已经过期");
+        }
+        //进行token比对
+        if (StringUtils.equals(forgetToken,value)) {
+            //对用户输入的密码 进行md5加密
+            String md5PassWord = MD5Util.MD5EncodeUtf8(passwordNew);
+            int resultCount = userMapper.updatePasswordByUsername(username, md5PassWord);
+            if (resultCount > 0 ) {
+                return ServerResponse.createBySuccessMessage("密码修改成功");
+            } else {
+                return ServerResponse.createByErrorMessage("密码修改失败, 请重试");
+            }
+        } else {
+            return ServerResponse.createByErrorMessage("token错误");
+        }
+
     }
+
+    @Override
+    public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, User user) {
+        int resultCount = userMapper.checkPassword(MD5Util.MD5EncodeUtf8(passwordOld), user.getId());
+        if (resultCount == 0) {
+            return ServerResponse.createByErrorMessage("旧密码错误");
+        }
+        user.setPassword(MD5Util.MD5EncodeUtf8(passwordNew));
+        int updateCount = userMapper.updateByPrimaryKeySelective(user);
+        if (updateCount == 0) {
+            return ServerResponse.createByErrorMessage("密码更新失败 请重试");
+        }
+        return ServerResponse.createBySuccessMessage("密码更新成功");
+    }
+
+
+
 }

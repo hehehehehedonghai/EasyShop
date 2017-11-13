@@ -107,4 +107,35 @@ public class UserController {
     public ServerResponse<String> getQuestionAnswer(String username, String question, String answer ){
         return userService.checkAnswer(username, question, answer);
     }
+
+    /**
+     * 未登录状态下 用户重置密码
+     * @param username 用户名
+     * @param passwordNew 新密码
+     * @param forgetToken 唯一凭证
+     * @return
+     */
+    @RequestMapping(value = "forgetResetPassword.do",method = RequestMethod.GET)
+    public ServerResponse<String> forgetResetPassword(String username, String passwordNew, String forgetToken){
+        return userService.forgetResetPassword(username, passwordNew, forgetToken);
+    }
+
+    /**
+     * 登录状态下的 重置密码
+     * @param passwordOld 旧密码
+     * @param passwordNew 新密码
+     * @return
+     */
+    @RequestMapping(value = "resetPassword.do",method = RequestMethod.GET)
+    public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, HttpSession session){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        return userService.resetPassword(passwordOld, passwordNew, user);
+    }
+
+
+
+
 }

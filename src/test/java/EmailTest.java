@@ -18,7 +18,43 @@ public class EmailTest {
         return m.matches();
     }
 
-    public static void main(String[] args) {
-        System.out.println( checkEmaile("123456@qq.com123@123@.com"));
+    public static void main(String[] args) throws InterruptedException {
+        //System.out.println( checkEmaile("123456@qq.com123@123@.com"));
+        String str = "/*\n" +
+                "*      \n" +
+                "*          ┌─┐       ┌─┐\n" +
+                "*       ┌──┘ ┴───────┘ ┴──┐\n" +
+                "*       │                 │\n" +
+                "*       │       ───       │\n" +
+                "*       │  ─┬┘       └┬─  │\n" +
+                "*       │                 │\n" +
+                "*       │       ─┴─       │\n" +
+                "*       │                 │\n" +
+                "*       └───┐         ┌───┘\n" +
+                "*           │         │\n" +
+                "*           │         │\n" +
+                "*           │         │\n" +
+                "*           │         └──────────────┐\n" +
+                "*           │                        │\n" +
+                "*           │                        ├─┐\n" +
+                "*           │                        ┌─┘    \n" +
+                "*           │                        │\n" +
+                "*           └─┐  ┐  ┌───────┬──┐  ┌──┘         \n" +
+                "*             │ ─┤ ─┤       │ ─┤ ─┤         \n" +
+                "*             └──┴──┘       └──┴──┘ \n" +
+                "*                    神兽保佑\n" +
+                "*                  \n" +
+                "*/";
+
+        for (int i = 0; i < str.length(); i++)
+        {
+            System.out.print(str.charAt(i));
+            try {
+                //输一个停一秒
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

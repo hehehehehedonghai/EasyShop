@@ -34,7 +34,38 @@ public interface UserService {
      */
     ServerResponse<String> checkValid(String str, String type);
 
+    /**
+     * 获取用户重置密码问题
+     * @param username
+     * @return
+     */
     ServerResponse<String> selectQuestion(String username);
 
+    /**
+     * checkAnswer
+     * 用户重置密码  参数校检
+     * @param username 用户名
+     * @param question 用户问题
+     * @param answer  用户答案
+     * @return
+     */
     ServerResponse<String> checkAnswer(String username, String question, String answer);
+
+    /**
+     * 未登录状态下的 重置密码
+     * @param username 用户名
+     * @param passwordNew 密码
+     * @param forgetToken 唯一凭证
+     * @return
+     */
+    ServerResponse<String> forgetResetPassword(String username, String passwordNew, String forgetToken);
+
+    /**
+     * 登录状态下的 重置密码
+     * @param passwordOld 旧密码
+     * @param passwordNew 新密码
+     * @param user 用户对象
+     * @return
+     */
+    ServerResponse<String> resetPassword(String passwordOld, String passwordNew, User user);
 }

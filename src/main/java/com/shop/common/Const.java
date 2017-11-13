@@ -11,11 +11,17 @@ import java.util.Set;
  * @create 2017/11/8/9:48
  */
 public class Const {
-
+    /**
+     * 用户名
+     */
     public static final String CURRENT_USER = "currentUser";
 
     public static final String EMAIL = "email";
     public static final String USERNAME = "username";
+    /**
+     * 邮箱匹配正则
+     */
+    public static final String RULE_EMAIL = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
 
     public interface ProductListOrderBy{
         Set<String> PRICE_ASC_DESC = Sets.newHashSet("price_desc","price_asc");
