@@ -23,9 +23,7 @@ import java.util.Set;
  */
 @Service
 public class CategoryServiceImpl implements CategoryService {
-
     private Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
-
     @Autowired
     private CategoryMapper categoryMapper;
 
@@ -87,8 +85,11 @@ public class CategoryServiceImpl implements CategoryService {
         return ServerResponse.createBySuccess(categoryIdList);
     }
 
+
     /**
-     * 递归算法
+     * 递归调用
+     * @param categorySet
+     * @param categoryId
      * @return
      */
     private Set<Category> findChildCategory(Set<Category> categorySet, Integer categoryId){

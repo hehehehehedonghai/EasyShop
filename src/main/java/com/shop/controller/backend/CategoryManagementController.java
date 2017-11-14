@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
-
-
-
 /**
  * CategoryManagementController
  * 后台商品分类管理
@@ -37,21 +34,13 @@ public class CategoryManagementController {
                                               @RequestParam(value = "parentId", defaultValue = "0") Integer parentId ){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         //校检是否是管理员角色
-        if (this.checkAdminRole(user).isSuccess()) {
+        ServerResponse serverResponse = this.checkAdminRole(user);
+        if (serverResponse.isSuccess()) {
             return categoryService.addCategory(categoryName, parentId);
         } else {
-            return ServerResponse.createByErrorMessage("不是管理员 无权操作");
+            return serverResponse;
         }
-        
-        /* if (user == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录");
-        }
-        //校检是否是管理员角色
-        if (user.getRole().intValue() == Const.Role.ROLE_ADMIN){
-            return categoryService.addCategory(categoryName, parentId);
-        } else {
-            return ServerResponse.createByErrorMessage("不是管理员 无权操作");
-        }*/
+
     }
 
     /**
@@ -64,26 +53,31 @@ public class CategoryManagementController {
     @RequestMapping("set_category_name.do")
     public ServerResponse<String> setCategoryName(HttpSession session, Integer categoryId, String categoryName){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (this.checkAdminRole(user).isSuccess()) {
+        //校检是否是管理员角色
+        ServerResponse serverResponse = this.checkAdminRole(user);
+        if (serverResponse.isSuccess()) {
             return categoryService.setCategoryName(categoryId, categoryName);
         } else {
-            return ServerResponse.createByErrorMessage("不是管理员 无权操作");
+            return serverResponse;
         }
     }
 
     @RequestMapping("get_category.do")
     public ServerResponse getChildrenParallelCategory(HttpSession session, @RequestParam(value = "categoryId", defaultValue = "0")Integer categoryId){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (this.checkAdminRole(user).isSuccess()) {
+        //校检是否是管理员角色
+        ServerResponse serverResponse = this.checkAdminRole(user);
+        if (serverResponse.isSuccess()) {
             return categoryService.getChildrenParallelCategory(categoryId);
         } else {
-            return ServerResponse.createByErrorMessage("不是管理员 无权操作");
+            return serverResponse;
         }
     }
 
     @RequestMapping("get_deep_category.do")
     public ServerResponse getCategoryAndDeepChildrenCategory(HttpSession session, @RequestParam(value = "categoryId", defaultValue = "0")Integer categoryId){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
+        //校检是否是管理员角色
         ServerResponse serverResponse = this.checkAdminRole(user);
         if (serverResponse.isSuccess()) {
             return categoryService.selectCategoryAndChildrenById(categoryId);

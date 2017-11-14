@@ -54,4 +54,5 @@ public interface UserMapper {
     int checkEmailByUserId(@Param(value="email")String email,@Param(value="userId")Integer userId);
 
 
+    User selectadminRoleLogin(String username, String md5PassWord);
 }

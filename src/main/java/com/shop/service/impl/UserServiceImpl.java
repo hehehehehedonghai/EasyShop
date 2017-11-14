@@ -45,6 +45,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ServerResponse<User> adminRoleLogin(String username, String password) {
+        // 校检用户名是否存在
+        if (userMapper.checkUsername(username) == 0) {
+            return ServerResponse.createByErrorMessage("用户名不存在");
+        }
+        //对密码进行加密 与数据库中已加密的密码  进行比对
+        String md5PassWord = MD5Util.MD5EncodeUtf8(password);
+        User user = userMapper.selectadminRoleLogin(username,md5PassWord);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ERROR.getCode(),"密码错误");
+        }
+        //使得前台json数据中无法看到密码
+        user.setPassword(null);
+        return ServerResponse.createBySuccess(user);
+
+    }
+
+    @Override
     public ServerResponse<String> register(User user) {
         // 校检用户名是否存在
         if (userMapper.checkUsername(user.getUsername()) > 0){

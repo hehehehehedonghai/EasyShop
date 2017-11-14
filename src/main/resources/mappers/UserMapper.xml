@@ -172,6 +172,15 @@
     and password = #{password}
   </select>
 
+  <select id="selectadminRoleLogin" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from mmall_user
+    where username = #{username}
+    and password = #{password}
+    and role = 0
+  </select>
+
 
   <select id="selectQuestionByUsername" resultType="string" parameterType="string">
     select
