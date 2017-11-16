@@ -4,13 +4,12 @@ import com.shop.common.ServerResponse;
 import com.shop.pojo.User;
 /**
  * UserService
- * 用户模块接口
+ * 用户模块业务层接口
  * @author Yarn
  * @create 2017/11/10/11:12
  */
 public interface UserService {
     /**
-     * login
      * 用户登录
      * @param username 用户名
      * @param password 密码
@@ -28,7 +27,6 @@ public interface UserService {
 
 
     /**
-     * register
      * 用户注册
      * @param user
      * @return
@@ -78,5 +76,17 @@ public interface UserService {
      */
     ServerResponse<String> resetPassword(String passwordOld, String passwordNew, User user);
 
+    /**
+     * 跟新用户信息
+     * @param user
+     * @return
+     */
+    ServerResponse<User> updateInformation(User user);
 
+    /**
+     * 获取用户信息
+     * @param id
+     * @return
+     */
+    ServerResponse<User> getInformation(Integer id);
 }

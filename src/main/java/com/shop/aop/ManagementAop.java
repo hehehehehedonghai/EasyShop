@@ -22,6 +22,9 @@ import java.lang.reflect.Array;
 @Aspect
 @Component
 public class ManagementAop {
+    
+    // AOP你mmp  草
+
 
    /* @Before("execution(* com.shop.controller.backend..*.*(..))")
     public ServerResponse before(JoinPoint point) throws Throwable {
@@ -57,5 +60,6 @@ public class ManagementAop {
             }
         }
         throw new RuntimeException("用户未登录");
+        // 结果就是去你mmp的aop
     }*/
 }

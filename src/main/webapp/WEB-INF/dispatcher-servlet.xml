@@ -33,6 +33,16 @@
     </mvc:annotation-driven>
 
 
+    <!--拦截器开始-->
+    <!--<mvc:interceptors>
+        <mvc:interceptor>
+            &lt;!&ndash; 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller &ndash;&gt;
+            <mvc:mapping path="/manage/**" />
+            <bean class="com.shop.interceptor.BackgroundInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>-->
+    <!--拦截器结束-->
+
 
     <!-- 文件上传 -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

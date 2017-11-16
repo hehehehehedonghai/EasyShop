@@ -1,7 +1,11 @@
 package com.shop.service;
 
+import com.github.pagehelper.PageInfo;
 import com.shop.common.ServerResponse;
-import com.shop.pojo.Product; /**
+import com.shop.pojo.Product;
+import com.shop.vo.ProductDetailVo;
+
+/**
  * ProductService
  *
  * @author Yarn
@@ -15,5 +19,17 @@ public interface ProductService {
      */
     ServerResponse saveOrUpdateProduct(Product product);
 
+    /**
+     * 更新产品销售状态
+     * @param productId
+     * @param status
+     * @return
+     */
     ServerResponse<String> setSaleStatus(Integer productId, Integer status);
+
+    ServerResponse<ProductDetailVo> manageProductDetail(Integer productId);
+
+    ServerResponse<PageInfo> getProductList(int pageNum, int pageSize);
+
+    ServerResponse<PageInfo> searchProduct(String productName, Integer producId, int pageNum, int pageSize);
 }

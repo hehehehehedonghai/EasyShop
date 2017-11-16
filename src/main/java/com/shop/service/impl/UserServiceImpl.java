@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ERROR.getCode(),"密码错误");
         }
         //使得前台json数据中无法看到密码
-        user.setPassword(null);
+        user.setPassword(StringUtils.EMPTY);
         return ServerResponse.createBySuccess(user);
 
     }
@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
         } else {
             return ServerResponse.createByErrorMessage("参数错误");
         }
-        return ServerResponse.createBySuccess("校检成功");
+        return ServerResponse.createBySuccess("校检通过");
     }
 
     @Override
@@ -195,6 +195,39 @@ public class UserServiceImpl implements UserService {
         return ServerResponse.createBySuccessMessage("密码更新成功");
     }
 
+    @Override
+    public ServerResponse<User> updateInformation(User user) {
+        int resultCount = userMapper.checkEmailByUserId(user.getEmail(), user.getId());
+        if (resultCount > 0) {
+            return ServerResponse.createByErrorMessage("email已经存在");
+        }
+        User updateUser = new User();
+        updateUser.setId(user.getId());
+        updateUser.setEmail(user.getEmail());
+        updateUser.setPhone(user.getPhone());
+        updateUser.setQuestion(user.getQuestion());
+        updateUser.setAnswer(user.getAnswer());
+
+        int rowCount = userMapper.updateByPrimaryKeySelective(updateUser);
+        if (rowCount == 0) {
+            return ServerResponse.createByErrorMessage("更新信息失败");
+        }
+        return ServerResponse.createBySuccess("更新信息成功", updateUser);
+    }
+
+    @Override
+    public ServerResponse<User> getInformation(Integer id) {
+        if (id == null) {
+            return ServerResponse.createByErrorMessage("参数错误");
+        }
+        User user = userMapper.selectByPrimaryKey(id);
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("没有找到该用户");
+        }
+        //将密码置为null 使得前台json数据中无法看到密码
+        user.setPassword(StringUtils.EMPTY);
+        return ServerResponse.createBySuccess(user);
+    }
 
 
 }

@@ -6,10 +6,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 	http://www.springframework.org/schema/mvc
-	http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd
+    http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <context:component-scan base-package="com.shop" annotation-config="true"/>
-
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
     <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
@@ -30,6 +32,16 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
+
+    <!--拦截器开始-->
+    <!--<mvc:interceptors>
+        <mvc:interceptor>
+            &lt;!&ndash; 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller &ndash;&gt;
+            <mvc:mapping path="/manage/**" />
+            <bean class="com.shop.interceptor.BackgroundInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>-->
+    <!--拦截器结束-->
 
 
     <!-- 文件上传 -->

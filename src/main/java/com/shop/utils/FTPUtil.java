@@ -16,6 +16,12 @@ public class FTPUtil {
 
     private static  final Logger logger = LoggerFactory.getLogger(FTPUtil.class);
 
+    private String ip;
+    private int port;
+    private String user;
+    private String pwd;
+    private FTPClient ftpClient;
+
     private static String ftpIp = PropertiesUtil.getProperty("ftp.server.ip");
     private static String ftpUser = PropertiesUtil.getProperty("ftp.user");
     private static String ftpPass = PropertiesUtil.getProperty("ftp.pass");
@@ -25,6 +31,10 @@ public class FTPUtil {
         this.port = port;
         this.user = user;
         this.pwd = pwd;
+    }
+
+    public FTPUtil(){
+
     }
     public static boolean uploadFile(List<File> fileList) throws IOException {
         FTPUtil ftpUtil = new FTPUtil(ftpIp,21,ftpUser,ftpPass);
@@ -56,6 +66,7 @@ public class FTPUtil {
                 uploaded = false;
                 e.printStackTrace();
             } finally {
+                //
                 fis.close();
                 ftpClient.disconnect();
             }
@@ -78,21 +89,6 @@ public class FTPUtil {
         return isSuccess;
     }
 
-
-
-
-
-
-
-
-
-
-
-    private String ip;
-    private int port;
-    private String user;
-    private String pwd;
-    private FTPClient ftpClient;
 
     public String getIp() {
         return ip;

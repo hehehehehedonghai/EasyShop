@@ -94,6 +94,7 @@ public class CategoryManagementController {
      */
     private ServerResponse checkAdminRole(User user){
         if (user == null) {
+            //用户未登录
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录");
         }
         //校检是否是管理员角色

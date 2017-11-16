@@ -12,12 +12,20 @@ import java.util.Set;
  */
 public class Const {
     /**
-     * 用户名
+     * 当前用户
      */
     public static final String CURRENT_USER = "currentUser";
 
+    /**
+     * 邮箱
+     */
     public static final String EMAIL = "email";
+
+    /**
+     * 用户名
+     */
     public static final String USERNAME = "username";
+
     /**
      * 邮箱匹配正则
      */
