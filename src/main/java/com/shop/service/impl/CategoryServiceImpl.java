@@ -17,13 +17,15 @@ import java.util.Set;
 
 /**
  * CategoryServiceImpl
- *
+ * 分类管理接口实现类
  * @author Yarn
  * @create 2017/11/13/10:36
  */
 @Service
 public class CategoryServiceImpl implements CategoryService {
+
     private Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
+
     @Autowired
     private CategoryMapper categoryMapper;
 
@@ -61,6 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId) {
         List<Category> categoryList = categoryMapper.selectCategoryChildrenByParentId(categoryId);
+        //集合为null
         if (CollectionUtils.isEmpty(categoryList)) {
             logger.info("未找到当前分类的子分类");
         }
@@ -68,12 +71,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     /**
-     * 递归查询本节点id  及其孩子节点的id
+     * 递归查询本节点的id 及孩子节点的id
      * @param categoryId
      * @return
      */
     @Override
     public ServerResponse selectCategoryAndChildrenById(Integer categoryId) {
+        //创建一个set集合
         Set<Category> categorySet = Sets.newHashSet();
         findChildCategory(categorySet,categoryId);
         List<Integer> categoryIdList = Lists.newArrayList();
@@ -87,7 +91,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     /**
-     * 递归调用
+     * 递归算法,算出子节点
      * @param categorySet
      * @param categoryId
      * @return

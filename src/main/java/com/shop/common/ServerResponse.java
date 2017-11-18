@@ -6,15 +6,32 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import java.io.Serializable;
 
 /**
- * 高度复用返回对象
+ * ServerResponse
+ * 高度复用数据返回对象
  * @author Yarn
- * @date 2017年11月10日 15:18:53
+ * @date 2017年11月7日 15:18:53
  */
 @JsonSerialize(include =  JsonSerialize.Inclusion.NON_NULL)
 public class ServerResponse<T> implements Serializable {
-
+    /**
+     * status
+     * 0  代表 成功
+     * 1  代表 失败
+     * 2  代表 参数错误
+     * 10 代表 未登录
+     */
     private int status;
+
+    /**
+     * msg
+     * 消息
+     */
     private String msg;
+
+    /**
+     * data
+     * 泛型数据
+     */
     private T data;
 
     private ServerResponse(int status){
@@ -36,6 +53,10 @@ public class ServerResponse<T> implements Serializable {
         this.msg = msg;
     }
 
+    /**
+     * 使得不在json序列化中
+     * @return
+     */
     @JsonIgnore
     public boolean isSuccess(){
         return this.status == ResponseCode.SUCCESS.getCode();

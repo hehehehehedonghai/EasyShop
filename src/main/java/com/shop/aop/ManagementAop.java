@@ -22,7 +22,7 @@ import java.lang.reflect.Array;
 @Aspect
 @Component
 public class ManagementAop {
-    
+
     // AOP你mmp  草
 
 

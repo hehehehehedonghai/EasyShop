@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * CartServiceImpl
- *
+ * 购物车接口实现类
  * @author Yarn
  * @create 2017/11/15/10:31
  */

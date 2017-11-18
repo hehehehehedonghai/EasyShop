@@ -172,7 +172,7 @@
     and password = #{password}
   </select>
 
-  <select id="selectadminRoleLogin" resultMap="BaseResultMap">
+  <select id="selectAdminRoleLogin" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
     from mmall_user

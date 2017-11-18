@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * CartController
- * 购物车
+ * 购物车模块
  * @author Yarn
  * @create 2017/11/15/10:25
  */
